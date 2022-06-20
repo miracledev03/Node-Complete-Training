@@ -54,8 +54,7 @@ const getCourses = async () => {
   const pageSize = 10;
   // /api/courses?pageNumber=2&pageSize=10
 
-  const courses = await Course
-    .find({ author: "Mosh", isPublished: true })
+  const courses = await Course.find({ author: "Mosh", isPublished: true })
     .find({ price: { $gt: 10 } })
     .find({ price: { $in: [10, 15, 20] } })
     .or([{ author: "Mosh" }, { isPublished: true }])
@@ -71,3 +70,44 @@ const getCourses = async () => {
 };
 
 getCourses();
+
+const updateCourse = async (id) => {
+  console.log(`Updating id:${id}`);
+
+  // Approach: Query first
+  // findById()
+  // Modify its properties
+  // save()
+  // const course = await Course.findById(id);
+  // if (!course) return;
+
+  // course.isPublished = true;
+  // course.author = 'Another Author';
+
+  // // Also possible to do this
+  // // course.set({
+  // //   isPublished: true,
+  // //   author: 'Another Author'
+  // // });
+
+  // const result = await course.save();
+  // console.log(result);
+
+  // Another Approach: Updat first
+  // Update directly
+  // Optionally get the updated document
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        author: "Jason",
+        isPublished: false,
+      },
+    },
+    { new: true }
+  );
+
+  console.log(course);
+};
+
+updateCourse("5a68fdc3615eda645bc6bdec");
