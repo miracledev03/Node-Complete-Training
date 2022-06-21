@@ -19,6 +19,9 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["web", "mobile", "network"],
+    // lowercase: true,
+    // uppercase: true,
+    trim: true,
   },
   author: String,
   tags: {
@@ -47,6 +50,8 @@ const courseSchema = new mongoose.Schema({
     },
     min: 10,
     max: 200,
+    get: (v) => Math.round(v),
+    set: (v) => Math.round(v),
   },
 });
 
@@ -55,11 +60,11 @@ const Course = mongoose.model("Course", courseSchema);
 const createCourse = async () => {
   const course = new Course({
     name: "React.js Course",
-    category: "-",
+    category: "web",
     author: "Bryan",
-    tags: [],
+    tags: ["frontend"],
     isPublished: true,
-    price: 15,
+    price: 15.8,
   });
 
   try {
@@ -72,7 +77,7 @@ const createCourse = async () => {
   }
 };
 
-createCourse();
+// createCourse();
 
 const getCourses = async () => {
   // => Comparison Query Operators
@@ -94,22 +99,24 @@ const getCourses = async () => {
   const pageSize = 10;
   // /api/courses?pageNumber=2&pageSize=10
 
-  const courses = await Course.find({ author: "Mosh", isPublished: true })
-    .find({ price: { $gt: 10 } })
-    .find({ price: { $in: [10, 15, 20] } })
-    .or([{ author: "Mosh" }, { isPublished: true }])
-    .find({ author: /^Mosh/ }) // Starts with Mosh
-    .find({ author: /pattern$/ }) // Ends with Hamedani
-    .find({ author: /.*Mosh.*/ }) // Contains Mosh
-    .skip((pageNumber - 1) * pageSize)
-    .limit(pageSize)
+  const courses = await Course
+    .find({ _id: '62b1b446722eca241ca9f15f' })
+    // .find({ author: "Mosh", isPublished: true })
+    // .find({ price: { $gt: 10 } })
+    // .find({ price: { $in: [10, 15, 20] } })
+    // .or([{ author: "Mosh" }, { isPublished: true }])
+    // .find({ author: /^Mosh/ }) // Starts with Mosh
+    // .find({ author: /pattern$/ }) // Ends with Hamedani
+    // .find({ author: /.*Mosh.*/ }) // Contains Mosh
+    // .skip((pageNumber - 1) * pageSize)
+    // .limit(pageSize)
     .sort({ name: 1 })
-    .select({ name: 1, tags: 1 })
-    .count();
-  console.log(courses);
+    .select({ name: 1, tags: 1, price: 1 })
+    // .count();
+  console.log(courses[0].price);
 };
 
-// getCourses();
+getCourses();
 
 const updateCourse = async (id) => {
   console.log(`Updating id:${id}`);
