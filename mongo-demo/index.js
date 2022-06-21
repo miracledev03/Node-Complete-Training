@@ -55,7 +55,7 @@ const Course = mongoose.model("Course", courseSchema);
 const createCourse = async () => {
   const course = new Course({
     name: "React.js Course",
-    category: "web",
+    category: "-",
     author: "Bryan",
     tags: [],
     isPublished: true,
@@ -66,7 +66,9 @@ const createCourse = async () => {
     const result = await course.save();
     console.log(result);
   } catch (ex) {
-    console.log(ex.message);
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
   }
 };
 
