@@ -8,7 +8,7 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 const courseSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   author: String,
   tags: [String],
   date: {
@@ -22,17 +22,21 @@ const Course = mongoose.model("Course", courseSchema);
 
 const createCourse = async () => {
   const course = new Course({
-    name: "React.js Course",
+    // name: "React.js Course", // req.body.name
     author: "Bryan",
     tags: ["angular", "frontend"],
     isPublished: true,
   });
 
-  const result = await course.save();
-  console.log(result);
+  try {
+    const result = await course.save();
+    console.log(result);
+  } catch (ex) {
+    console.log(ex.message);
+  }
 };
 
-// createCourse();
+createCourse();
 
 const getCourses = async () => {
   // => Comparison Query Operators
@@ -69,7 +73,7 @@ const getCourses = async () => {
   console.log(courses);
 };
 
-getCourses();
+// getCourses();
 
 const updateCourse = async (id) => {
   console.log(`Updating id:${id}`);
@@ -110,7 +114,7 @@ const updateCourse = async (id) => {
   console.log(course);
 };
 
-updateCourse("5a68fdc3615eda645bc6bdec");
+// updateCourse("5a68fdc3615eda645bc6bdec");
 
 const removeCourse = async (id) => {
   // const result = await Course.deleteMany({ _id: id });
@@ -119,4 +123,4 @@ const removeCourse = async (id) => {
   console.log(course);
 };
 
-removeCourse("5a68fdc3615eda645bc6bdec");
+// removeCourse("5a68fdc3615eda645bc6bdec");
