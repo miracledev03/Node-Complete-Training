@@ -7,10 +7,7 @@ describe("fizzBuzz", () => {
       "`",
       "10912&@!#*#ADSf",
       {},
-      null,
-      undefined,
-      "",
-      false,
+      null
     ];
     args.forEach((arg) => {
       expect(() => {
