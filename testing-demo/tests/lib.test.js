@@ -56,7 +56,30 @@ describe("getProduct", () => {
 
     // Use this when there are many properties
     // and you don't want to add the properties
-    expect(result).MatchObject({ id: 1, price: 10 });
-    expect(result).tohaveProperty('id', 1);
+    expect(result).toMatchObject({ id: 1, price: 10 });
+    expect(result).toHaveProperty("id", 1);
+  });
+});
+
+describe("registerUser", () => {
+  it("should throw if username is falsy", () => {
+    // Null
+    // undefined
+    // Nan
+    // ''
+    // 0
+    // false
+    const args = [null, undefined, NaN, "", 0, false];
+    args.forEach((arg) => {
+      expect(() => {
+        lib.registerUser(arg);
+      }).toThrow();
+    });
+  });
+
+  it("should return a user object if valid username is passed", () => {
+    const result = lib.registerUser("mosh");
+    expect(result).toMatchObject({ username: "mosh" });
+    expect(result.id).toBeGreaterThan(0);
   });
 });
