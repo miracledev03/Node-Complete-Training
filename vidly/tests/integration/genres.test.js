@@ -10,8 +10,8 @@ describe("/api/genres", () => {
   });
 
   afterEach(async () => {
-    server.close();
     await Genre.remove({});
+    server.close();
   });
 
   describe("GET /", () => {
