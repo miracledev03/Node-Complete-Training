@@ -1,6 +1,7 @@
 const request = require("supertest");
 const { Genre } = require("../../models/genre");
 const { User } = require("../../models/user");
+const mongoose = require("mongoose");
 
 let server;
 
@@ -45,6 +46,13 @@ describe("/api/genres", () => {
 
       expect(res.status).toBe(404);
     });
+
+    it("should return 404 if no genre with the given id exists", async () => {
+      const id = mongoose.Types.ObjectId();
+      const res = await request(server).get("/api/genres/" + id);
+
+      expect(res.status).toBe(404);
+    });
   });
 
   describe("POST /", () => {
@@ -63,7 +71,7 @@ describe("/api/genres", () => {
 
     beforeEach(() => {
       token = new User().generateAuthToken();
-      name = 'genre1';
+      name = "genre1";
     });
 
     it("should return 401 if client is not logged in", async () => {
@@ -75,7 +83,7 @@ describe("/api/genres", () => {
     });
 
     it("should return 400 if genre is less than 5 characters", async () => {
-      name = '1234';
+      name = "1234";
 
       const res = await exec();
 
