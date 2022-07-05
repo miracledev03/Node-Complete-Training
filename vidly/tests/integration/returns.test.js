@@ -15,7 +15,7 @@ describe("/api/returns", () => {
       .post("/api/returns")
       .set("x-auth-token", token)
       .send({ customerId, movieId });
-  }
+  };
 
   beforeEach(async () => {
     server = require("../../index");
@@ -46,7 +46,7 @@ describe("/api/returns", () => {
   });
 
   it("should return 401 if client is not logged in", async () => {
-    token = '';
+    token = "";
 
     const res = await exec();
 
@@ -54,7 +54,7 @@ describe("/api/returns", () => {
   });
 
   it("should return 400 if customerId is not provided", async () => {
-    customerId = '';
+    customerId = "";
 
     const res = await exec();
 
@@ -62,7 +62,7 @@ describe("/api/returns", () => {
   });
 
   it("should return 400 if movieId is not provided", async () => {
-    movieId = '';
+    movieId = "";
 
     const res = await exec();
 
@@ -75,5 +75,14 @@ describe("/api/returns", () => {
     const res = await exec();
 
     expect(res.status).toBe(404);
+  });
+
+  it("should return 400 if return is already processed", async () => {
+    rental.dateReturned = new Date();
+    await rental.save();
+
+    const res = await exec();
+
+    expect(res.status).toBe(400);
   });
 });
